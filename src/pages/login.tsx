@@ -249,3 +249,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
+export { LoginPage as Login };

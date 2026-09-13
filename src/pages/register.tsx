@@ -781,3 +781,6 @@ export default function RegisterPage() {
     </div>
   );
 }
+
+export { RegisterPage as Register };
+

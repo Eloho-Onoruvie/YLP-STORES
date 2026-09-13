@@ -122,7 +122,7 @@ export default function CustomerDashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<OrderItem | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-  const [emptyResourcesState, setEmptyResourcesState] = useState(false);
+  const [emptyResourcesState] = useState(false);
   const [emptyOrdersState, setEmptyOrdersState] = useState(false);
   const [emptyWishlistState, setEmptyWishlistState] = useState(false);
 
@@ -262,7 +262,7 @@ export default function CustomerDashboard() {
       <Sidebar
         role="customer"
         activeTab={activeTab}
-        onTabChange={(tabId) => setActiveTab(tabId)}
+        onTabChange={(tabId: string) => setActiveTab(tabId)}
         mobileOpen={mobileSidebarOpen}
         onMobileClose={() => setMobileSidebarOpen(false)}
         badges={{

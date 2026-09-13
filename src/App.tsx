@@ -1,23 +1,84 @@
-import { Routes, Route } from "react-router-dom";
-import LandingPage from "./pages/landingPage";
-import RegisterPage from "./pages/register";
-import LoginPage from "./pages/login";
-import CustomerDashboard from "./pages/customers/dashboard";
+import { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { Navbar } from './components/layout/Navbar';
+import { Footer } from './components/layout/Footer';
+import { MobileNav } from './components/layout/MobileNav';
+import { ToastContainer } from './components/ui/Toast';
 
-function App() {
+import { Home } from './pages/Home';
+import { Books } from './pages/Books';
+import { BookDetails } from './pages/BookDetails';
+import { Bookmarks } from './pages/Bookmarks';
+import { Cart } from './pages/Cart';
+import { Checkout } from './pages/Checkout';
+import { PurchaseSuccess } from './pages/PurchaseSuccess';
+import { MyBooks } from './pages/MyBooks';
+import { Reading } from './pages/Reading';
+import { Orders } from './pages/Orders';
+import { Profile } from './pages/Profile';
+import { Login } from './pages/Login';
+import { Register } from './pages/Register';
+import { ForgotPassword } from './pages/ForgotPassword';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
+function LayoutWrapper() {
+  const location = useLocation();
+  const isReaderPage = location.pathname.startsWith('/read/');
+
+  if (isReaderPage) {
+    return (
+      <main className="min-h-screen">
+        <ScrollToTop />
+        <Routes>
+          <Route path="/read/:bookId" element={<Reading />} />
+        </Routes>
+        <ToastContainer />
+      </main>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-[#FFFDF8] text-slate-900 antialiased selection:bg-sky-200">
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/landing" element={<LandingPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/signup" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/dashboard" element={<CustomerDashboard />} />
-        <Route path="/customer/dashboard" element={<CustomerDashboard />} />
-        <Route path="/customers/dashboard" element={<CustomerDashboard />} />
-      </Routes>
+    <div className="min-h-screen flex flex-col bg-stone-50/50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors selection:bg-amber-500 selection:text-white">
+      <ScrollToTop />
+      <Navbar />
+      <main className="flex-1">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/books" element={<Books />} />
+          <Route path="/books/:id" element={<BookDetails />} />
+          <Route path="/categories/:category" element={<Books />} />
+          <Route path="/bookmarks" element={<Bookmarks />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/purchase-success" element={<PurchaseSuccess />} />
+          <Route path="/my-books" element={<MyBooks />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/orders/:id" element={<Orders />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+        </Routes>
+      </main>
+      <Footer />
+      <MobileNav />
+      <ToastContainer />
     </div>
+  );
+}
+
+export function App() {
+  return (
+    <Router>
+      <LayoutWrapper />
+    </Router>
   );
 }
 
