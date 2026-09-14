@@ -98,11 +98,7 @@ const IconCheck = ({ className = "w-5 h-5" }: { className?: string }) => (
   </svg>
 );
 
-const IconCross = ({ className = "w-4 h-4" }: { className?: string }) => (
-  <svg className={className} fill="currentColor" viewBox="0 0 24 24">
-    <path d="M10.5 2h3v6h6v3h-6v11h-3V11h-6V8h6V2z" />
-  </svg>
-);
+
 
 const IconInstagram = ({ className = "w-5 h-5" }: { className?: string }) => (
   <svg className={className} fill="currentColor" viewBox="0 0 24 24">

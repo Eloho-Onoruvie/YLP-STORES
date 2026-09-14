@@ -1,5 +1,7 @@
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import { Link } from "react-router-dom";
+import { registerUserInLocalStorage } from "../utils/authStorage";
+
 
 // Inline SVG Icon Helpers
 const IconEye = ({ className = "w-5 h-5" }: { className?: string }) => (
@@ -106,6 +108,7 @@ export default function RegisterPage() {
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [authError, setAuthError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -161,6 +164,7 @@ export default function RegisterPage() {
     const fieldValue = type === "checkbox" ? checked : value;
 
     setFormData((prev) => ({ ...prev, [name]: fieldValue }));
+    setAuthError(null);
 
     if (touched[name]) {
       const errorMsg = validateField(name, fieldValue);
@@ -184,6 +188,7 @@ export default function RegisterPage() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    setAuthError(null);
 
     const allTouched = {
       firstName: true,
@@ -205,13 +210,23 @@ export default function RegisterPage() {
 
     if (Object.keys(newErrors).length === 0) {
       setIsLoading(true);
-      // Simulate real auth creation network delay
       setTimeout(() => {
+        const result = registerUserInLocalStorage({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password
+        });
         setIsLoading(false);
-        setIsSuccess(true);
-      }, 1500);
+        if (result.success) {
+          setIsSuccess(true);
+        } else {
+          setAuthError(result.error || "Failed to create account in local storage.");
+        }
+      }, 1000);
     }
   };
+
 
   return (
     <div className="min-h-screen bg-[#FFFDF8] text-[#1A1A1A] font-sans antialiased flex flex-col justify-between selection:bg-sky-200 selection:text-slate-900">
@@ -447,16 +462,33 @@ export default function RegisterPage() {
                     </p>
                   </div>
 
+                  {/* Error Alert Box if any */}
+                  {authError && (
+                    <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-700 space-y-1 animate-in fade-in">
+                      <p className="font-bold flex items-center gap-1.5">
+                        <span className="w-2 h-2 rounded-full bg-rose-500 inline-block"></span>
+                        Registration Notice
+                      </p>
+                      <p>{authError}</p>
+                    </div>
+                  )}
+
                   {/* SOCIAL REGISTRATION BUTTON */}
                   <div className="space-y-4 pt-1">
                     <button
                       type="button"
                       onClick={() => {
                         setIsLoading(true);
+                        setAuthError(null);
                         setTimeout(() => {
+                          registerUserInLocalStorage({
+                            firstName: "Google",
+                            lastName: "User",
+                            email: "reader.google@example.com"
+                          });
                           setIsLoading(false);
                           setIsSuccess(true);
-                        }, 1200);
+                        }, 1000);
                       }}
                       className="w-full bg-white hover:bg-slate-50 text-slate-700 font-semibold py-3 px-4 rounded-full border border-slate-200 shadow-xs hover:border-slate-300 transition-all hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-3 text-sm cursor-pointer"
                     >
@@ -472,6 +504,7 @@ export default function RegisterPage() {
                       </span>
                     </div>
                   </div>
+
 
                   {/* FORM FIELDS */}
                   <form onSubmit={handleSubmit} noValidate className="space-y-4">

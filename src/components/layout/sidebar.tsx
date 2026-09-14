@@ -1,4 +1,5 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getCurrentUser, logout } from "../../utils/authStorage";
 
 // Inline Icon Helpers for zero-dependency rendering
 const IconBookOpen = ({ className = "w-5 h-5" }: { className?: string }) => (
@@ -90,7 +91,7 @@ export interface NavItemConfig {
   id: string;
   label: string;
   href?: string;
-  icon: (props: { className?: string }) => JSX.Element;
+  icon: (props: { className?: string }) => React.ReactNode;
   badge?: string;
   badgeBg?: string;
 }
@@ -113,19 +114,24 @@ export default function Sidebar({
   mobileOpen = false,
   onMobileClose,
   badges = {},
-  userName = role === "admin" ? "Admin Manager" : "Eloho O.",
-  userEmail = role === "admin" ? "admin@ylpstores.com" : "eloho@example.com",
+  userName,
+  userEmail,
 }: SidebarProps) {
   const location = useLocation();
+  const navigate = useNavigate();
+  const currentUser = getCurrentUser();
+  const displayName = userName ?? (role === "admin" ? "Admin Manager" : (currentUser?.name || "YLP Member"));
+  const displayEmail = userEmail ?? (role === "admin" ? "admin@ylpstores.com" : (currentUser?.email || "member@ylpstores.com"));
 
   // Navigation Items according to Role
   const customerNavItems: NavItemConfig[] = [
     { id: "overview", label: "Overview", href: "/dashboard", icon: IconHome },
-    { id: "orders", label: "My Orders", href: "/dashboard", icon: IconShoppingBag, badge: badges.orders ?? "3" },
-    { id: "wishlist", label: "Wishlist", href: "/dashboard", icon: IconHeart, badge: badges.wishlist ?? "5" },
-    { id: "profile", label: "My Profile", href: "/dashboard", icon: IconUser },
-    { id: "resources", label: "Saved Resources", href: "/dashboard", icon: IconBookmark, badge: badges.resources ?? "2" },
-    { id: "settings", label: "Settings", href: "/dashboard", icon: IconSettings },
+    { id: "shop", label: "Browse Shop", href: "/shop", icon: IconBookOpen },
+    { id: "orders", label: "My Orders", href: "/orders", icon: IconShoppingBag, badge: badges.orders },
+    { id: "wishlist", label: "Wishlist", href: "/wishlist", icon: IconHeart, badge: badges.wishlist },
+    { id: "profile", label: "My Profile", href: "/profile", icon: IconUser },
+    { id: "addresses", label: "Addresses", href: "/addresses", icon: IconBookmark },
+    { id: "settings", label: "Settings", href: "/settings", icon: IconSettings },
   ];
 
   const adminNavItems: NavItemConfig[] = [
@@ -146,7 +152,8 @@ export default function Sidebar({
       return activeTab === item.id;
     }
     if (item.href) {
-      return location.pathname === item.href;
+      return location.pathname === item.href ||
+        (item.href !== "/dashboard" && location.pathname.startsWith(item.href));
     }
     return false;
   };
@@ -158,6 +165,11 @@ export default function Sidebar({
     if (onMobileClose) {
       onMobileClose();
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
   };
 
   const sidebarContent = (
@@ -191,11 +203,12 @@ export default function Sidebar({
             const Icon = item.icon;
             const active = isCurrentActive(item);
 
-            return (
-              <button
+            return item.href ? (
+              <Link
                 key={item.id}
+                to={item.href}
                 onClick={() => handleNavClick(item)}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm transition-all duration-200 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm transition-all duration-200 ${
                   active
                     ? "bg-[#EAF7FC] text-sky-700 font-bold border border-sky-200/60 shadow-xs translate-x-1"
                     : "text-slate-600 font-medium hover:bg-slate-50 hover:text-slate-900 hover:translate-x-0.5"
@@ -218,6 +231,21 @@ export default function Sidebar({
                     {item.badge}
                   </span>
                 )}
+              </Link>
+            ) : (
+              <button
+                key={item.id}
+                onClick={() => handleNavClick(item)}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm transition-all duration-200 cursor-pointer ${
+                  active
+                    ? "bg-[#EAF7FC] text-sky-700 font-bold border border-sky-200/60 shadow-xs translate-x-1"
+                    : "text-slate-600 font-medium hover:bg-slate-50 hover:text-slate-900 hover:translate-x-0.5"
+                }`}
+              >
+                <div className="flex items-center gap-3">
+                  <Icon className={`w-5 h-5 ${active ? "text-sky-600" : "text-slate-400"}`} />
+                  <span>{item.label}</span>
+                </div>
               </button>
             );
           })}
@@ -229,11 +257,11 @@ export default function Sidebar({
         {/* User Card */}
         <div className="bg-slate-50/80 rounded-2xl p-3.5 border border-slate-200/70 flex items-center gap-3">
           <div className={`w-9 h-9 rounded-full text-white font-bold text-xs flex items-center justify-center shadow-xs ${role === "admin" ? "bg-slate-800" : "bg-gradient-to-br from-sky-400 to-[#D4AF37]"}`}>
-            {userName.charAt(0)}
+            {displayName.charAt(0).toUpperCase()}
           </div>
           <div className="overflow-hidden flex-1">
-            <h5 className="text-xs font-bold text-slate-900 truncate">{userName}</h5>
-            <p className="text-[10px] text-slate-500 truncate">{userEmail}</p>
+            <h5 className="text-xs font-bold text-slate-900 truncate">{displayName}</h5>
+            <p className="text-[10px] text-slate-500 truncate">{displayEmail}</p>
           </div>
         </div>
 
@@ -247,13 +275,13 @@ export default function Sidebar({
             Help & Support
           </button>
           
-          <Link
-            to="/login"
+          <button
+            onClick={handleLogout}
             className="w-full flex items-center gap-3 px-3 py-2 text-rose-600 hover:bg-rose-50 rounded-xl transition-colors cursor-pointer"
           >
             <IconLogOut className="w-4.5 h-4.5 text-rose-500" />
             Log Out
-          </Link>
+          </button>
         </div>
       </div>
 

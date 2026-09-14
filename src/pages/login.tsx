@@ -1,5 +1,6 @@
 import { useState, type FormEvent, type ChangeEvent } from "react";
 import { Link } from "react-router-dom";
+import { loginUserInLocalStorage } from "../utils/authStorage";
 
 const IconEye = ({ className = "w-5 h-5" }: { className?: string }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.75">
@@ -67,17 +68,25 @@ const IconArrowRight = ({ className = "w-4 h-4" }: { className?: string }) => (
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    setErrorMsg(null);
     setIsLoading(true);
     setTimeout(() => {
+      const result = loginUserInLocalStorage(email, password);
       setIsLoading(false);
-      window.location.href = "/";
-    }, 1200);
+      if (result.success) {
+        window.location.href = "/customers/dashboard";
+      } else {
+        setErrorMsg(result.error || "Login failed.");
+      }
+    }, 800);
   };
+
 
   return (
     <div className="min-h-screen bg-[#FFFDF8] text-[#1A1A1A] font-sans antialiased flex flex-col justify-between selection:bg-sky-200">
@@ -149,7 +158,15 @@ export default function LoginPage() {
                 </p>
               </div>
 
+              {errorMsg && (
+                <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-700">
+                  {errorMsg}
+                </div>
+              )}
+
+
               <div className="space-y-4">
+
                 <button
                   type="button"
                   onClick={handleSubmit}
