@@ -25,6 +25,7 @@ export interface Product {
   isFeatured?: boolean;
   isBestseller?: boolean;
   isNew?: boolean;
+  badge?: string;
   details: {
     format?: string;
     pages?: number;

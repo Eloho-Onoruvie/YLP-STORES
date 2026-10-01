@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useShop, type Address } from '../context/ShopContext';
 import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
+import Footer from '../components/layout/footer';
 
 export const CheckoutPage: React.FC = () => {
   const navigate = useNavigate();
@@ -78,7 +78,7 @@ export const CheckoutPage: React.FC = () => {
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
-        
+
         <div className="border-b border-sky-100 pb-6 space-y-1">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100/70 text-sky-700 text-xs font-bold uppercase tracking-wider">
             <span>🔒 Secure Checkout</span>
@@ -89,10 +89,10 @@ export const CheckoutPage: React.FC = () => {
         </div>
 
         <form onSubmit={handleSubmitOrder} className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          
+
           {/* LEFT: FORM SECTIONS */}
           <div className="lg:col-span-7 space-y-8">
-            
+
             {/* 1. CONTACT INFORMATION */}
             <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-xs space-y-4">
               <h2 className="font-editorial text-xl font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
@@ -239,11 +239,10 @@ export const CheckoutPage: React.FC = () => {
               <div className="space-y-3">
                 <label
                   onClick={() => setPaymentMethod('card')}
-                  className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
-                    paymentMethod === 'card'
+                  className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${paymentMethod === 'card'
                       ? 'border-sky-500 bg-sky-50/50 text-slate-900 ring-2 ring-sky-300/40'
                       : 'border-slate-200 text-slate-600 hover:border-sky-200'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-3">
                     <span className="w-4 h-4 rounded-full border-2 border-sky-500 flex items-center justify-center">
@@ -256,11 +255,10 @@ export const CheckoutPage: React.FC = () => {
 
                 <label
                   onClick={() => setPaymentMethod('apple')}
-                  className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
-                    paymentMethod === 'apple'
+                  className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${paymentMethod === 'apple'
                       ? 'border-sky-500 bg-sky-50/50 text-slate-900 ring-2 ring-sky-300/40'
                       : 'border-slate-200 text-slate-600 hover:border-sky-200'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-3">
                     <span className="w-4 h-4 rounded-full border-2 border-sky-500 flex items-center justify-center">
@@ -273,11 +271,10 @@ export const CheckoutPage: React.FC = () => {
 
                 <label
                   onClick={() => setPaymentMethod('bank')}
-                  className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${
-                    paymentMethod === 'bank'
+                  className={`flex items-center justify-between p-4 rounded-2xl border cursor-pointer transition-all ${paymentMethod === 'bank'
                       ? 'border-sky-500 bg-sky-50/50 text-slate-900 ring-2 ring-sky-300/40'
                       : 'border-slate-200 text-slate-600 hover:border-sky-200'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center gap-3">
                     <span className="w-4 h-4 rounded-full border-2 border-sky-500 flex items-center justify-center">

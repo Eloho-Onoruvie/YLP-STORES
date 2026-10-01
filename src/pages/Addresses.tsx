@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useShop, type Address } from '../context/ShopContext';
 import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
+import Footer from '../components/layout/footer';
 
 const IconMapPin = ({ className = 'w-5 h-5' }: { className?: string }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -83,9 +83,8 @@ const AddressForm: React.FC<AddressFormProps> = ({ initial, onSave, onCancel }) 
       </div>
       <label className="flex items-center gap-3 cursor-pointer">
         <div
-          className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
-            form.isDefault ? 'bg-sky-500 border-sky-500' : 'bg-white border-slate-300'
-          }`}
+          className={`w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${form.isDefault ? 'bg-sky-500 border-sky-500' : 'bg-white border-slate-300'
+            }`}
           onClick={() => setForm((f) => ({ ...f, isDefault: !f.isDefault }))}
         >
           {form.isDefault && <IconCheck className="w-3 h-3 text-white" />}
@@ -96,11 +95,10 @@ const AddressForm: React.FC<AddressFormProps> = ({ initial, onSave, onCancel }) 
         <button
           onClick={() => isValid && onSave(form)}
           disabled={!isValid}
-          className={`inline-flex items-center gap-2 font-bold px-5 py-2.5 rounded-2xl transition-all text-sm ${
-            isValid
+          className={`inline-flex items-center gap-2 font-bold px-5 py-2.5 rounded-2xl transition-all text-sm ${isValid
               ? 'bg-sky-500 hover:bg-sky-600 text-white shadow-sm shadow-sky-500/20'
               : 'bg-slate-100 text-slate-400 cursor-not-allowed'
-          }`}
+            }`}
         >
           <IconCheck className="w-4 h-4" />
           Save Address
@@ -199,16 +197,14 @@ const AddressesPage: React.FC = () => {
                   />
                 ) : (
                   <div
-                    className={`bg-white rounded-3xl border shadow-xs p-5 flex flex-col sm:flex-row items-start gap-4 transition-all ${
-                      addr.isDefault
+                    className={`bg-white rounded-3xl border shadow-xs p-5 flex flex-col sm:flex-row items-start gap-4 transition-all ${addr.isDefault
                         ? 'border-sky-300/70 ring-2 ring-sky-100'
                         : 'border-slate-200/80'
-                    }`}
+                      }`}
                   >
                     <div
-                      className={`w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center ${
-                        addr.isDefault ? 'bg-sky-500' : 'bg-slate-100'
-                      }`}
+                      className={`w-10 h-10 shrink-0 rounded-2xl flex items-center justify-center ${addr.isDefault ? 'bg-sky-500' : 'bg-slate-100'
+                        }`}
                     >
                       <IconMapPin className={`w-5 h-5 ${addr.isDefault ? 'text-white' : 'text-slate-400'}`} />
                     </div>

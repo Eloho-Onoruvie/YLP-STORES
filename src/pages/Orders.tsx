@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useShop } from '../context/ShopContext';
 import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
+import Footer from '../components/layout/footer';
 
 export const OrdersPage: React.FC = () => {
   const { orders } = useShop();
@@ -25,7 +25,7 @@ export const OrdersPage: React.FC = () => {
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
-        
+
         <div className="border-b border-sky-100 pb-6 space-y-1">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100/70 text-sky-700 text-xs font-bold uppercase tracking-wider">
             <span>📦 Order History</span>

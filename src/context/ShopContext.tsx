@@ -1,9 +1,9 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { PRODUCTS } from '../data/products';
+import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { PRODUCTS, type Product } from '../data/products';
 import { getCurrentUser } from '../utils/authStorage';
 
 export interface CartItem {
-  product: any;
+  product: Product;
   quantity: number;
 }
 
@@ -47,7 +47,7 @@ export interface UserSettings {
 }
 
 interface ShopContextType {
-  products: any[];
+  products: Product[];
   cart: CartItem[];
   wishlist: string[];
   orders: Order[];
@@ -56,7 +56,7 @@ interface ShopContextType {
   settings: UserSettings;
   toast: { message: string; type: 'success' | 'info' | 'error' } | null;
   showToast: (message: string, type?: 'success' | 'info' | 'error') => void;
-  addToCart: (product: any[], quantity?: number) => void;
+  addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   updateCartQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;

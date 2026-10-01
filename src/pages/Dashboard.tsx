@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useShop } from '../context/ShopContext';
 import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
+import Footer from '../components/layout/footer';
 
 export const DashboardPage: React.FC = () => {
   const { profile, products, addToCart, toggleWishlist, isInWishlist } = useShop();
@@ -14,7 +14,7 @@ export const DashboardPage: React.FC = () => {
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
-        
+
         {/* 1. WELCOME SECTION */}
         <section className="relative rounded-3xl bg-gradient-to-br from-[#EAF7FC] via-[#FFFDF8] to-[#F8F4EE] p-8 sm:p-12 border border-sky-100/80 shadow-sm overflow-hidden">
           {/* Subtle Ambient Light Rays & Shimmer */}
@@ -39,9 +39,9 @@ export const DashboardPage: React.FC = () => {
         {/* 2. QUICK ACTIONS */}
         <section className="space-y-4">
           <h2 className="text-xs font-bold uppercase tracking-wider text-slate-400">Quick Navigation</h2>
-          
+
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            
+
             {/* Action 1: Shop Products */}
             <Link
               to="/shop"
@@ -155,11 +155,10 @@ export const DashboardPage: React.FC = () => {
                       />
                       <button
                         onClick={() => toggleWishlist(product.id)}
-                        className={`absolute top-3 right-3 p-2.5 rounded-full backdrop-blur-md transition-all shadow-xs ${
-                          bookmarked
+                        className={`absolute top-3 right-3 p-2.5 rounded-full backdrop-blur-md transition-all shadow-xs ${bookmarked
                             ? 'bg-rose-500 text-white'
                             : 'bg-white/80 text-slate-600 hover:bg-white hover:text-rose-500'
-                        }`}
+                          }`}
                         title={bookmarked ? 'Remove from Wishlist' : 'Add to Wishlist'}
                       >
                         <svg className="w-4 h-4" fill={bookmarked ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useShop } from '../context/ShopContext';
 import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
+import Footer from '../components/layout/footer';
 
 export const CartPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export const CartPage: React.FC = () => {
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8">
-        
+
         {/* PAGE HEADER */}
         <div className="border-b border-sky-100 pb-6 space-y-1">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-sky-100/70 text-sky-700 text-xs font-bold uppercase tracking-wider">
@@ -31,7 +31,7 @@ export const CartPage: React.FC = () => {
 
         {cart.length > 0 ? (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            
+
             {/* CART ITEMS LIST */}
             <div className="lg:col-span-8 space-y-4">
               {cart.map((item) => (
@@ -62,7 +62,7 @@ export const CartPage: React.FC = () => {
 
                   {/* Quantity & Actions */}
                   <div className="flex items-center justify-between sm:justify-end gap-6 w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-slate-100">
-                    
+
                     {/* Quantity Selector */}
                     <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-2 py-1">
                       <button

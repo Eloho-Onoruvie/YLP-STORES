@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useShop } from '../context/ShopContext';
+import { type Product } from '../data/products';
 import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
+import Footer from '../components/layout/footer';
 
 export const ProductDetailsPage: React.FC = () => {
   const { productId, id } = useParams<{ productId?: string; id?: string }>();
@@ -11,9 +12,13 @@ export const ProductDetailsPage: React.FC = () => {
   const navigate = useNavigate();
   const { products, addToCart, toggleWishlist, isInWishlist } = useShop();
 
-  const product = products.find((p) => p.id === targetId) || products[0];
+  const product: Product | undefined = products.find((p) => p.id === targetId) ?? products[0];
 
-  const [selectedImage, setSelectedImage] = useState(product.image);
+  if (!product) {
+    return null;
+  }
+
+  const [selectedImage, setSelectedImage] = useState<string>(product.image);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'details' | 'reviews'>('description');
 
@@ -33,7 +38,7 @@ export const ProductDetailsPage: React.FC = () => {
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
-        
+
         {/* BREADCRUMB */}
         <nav className="flex items-center gap-2 text-xs font-semibold text-slate-400">
           <Link to="/dashboard" className="hover:text-sky-600">Home</Link>
@@ -45,7 +50,7 @@ export const ProductDetailsPage: React.FC = () => {
 
         {/* MAIN PRODUCT LAYOUT */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          
+
           {/* LEFT: GALLERY IMAGES */}
           <div className="lg:col-span-6 space-y-4">
             <div className="relative aspect-4/3 sm:aspect-square rounded-3xl overflow-hidden bg-white border border-slate-200/80 shadow-md">
@@ -56,9 +61,8 @@ export const ProductDetailsPage: React.FC = () => {
               />
               <button
                 onClick={() => toggleWishlist(product.id)}
-                className={`absolute top-4 right-4 p-3 rounded-full backdrop-blur-md transition-all shadow-sm cursor-pointer ${
-                  bookmarked ? 'bg-rose-500 text-white' : 'bg-white/80 text-slate-600 hover:bg-white hover:text-rose-500'
-                }`}
+                className={`absolute top-4 right-4 p-3 rounded-full backdrop-blur-md transition-all shadow-sm cursor-pointer ${bookmarked ? 'bg-rose-500 text-white' : 'bg-white/80 text-slate-600 hover:bg-white hover:text-rose-500'
+                  }`}
                 title={bookmarked ? 'Remove from Wishlist' : 'Add to Wishlist'}
               >
                 <svg className="w-5 h-5" fill={bookmarked ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -72,9 +76,8 @@ export const ProductDetailsPage: React.FC = () => {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setSelectedImage(product.image)}
-                  className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all ${
-                    selectedImage === product.image ? 'border-sky-500 ring-2 ring-sky-300/40' : 'border-slate-200'
-                  }`}
+                  className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all ${selectedImage === product.image ? 'border-sky-500 ring-2 ring-sky-300/40' : 'border-slate-200'
+                    }`}
                 >
                   <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
                 </button>
@@ -82,9 +85,8 @@ export const ProductDetailsPage: React.FC = () => {
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(img)}
-                    className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all ${
-                      selectedImage === img ? 'border-sky-500 ring-2 ring-sky-300/40' : 'border-slate-200'
-                    }`}
+                    className={`w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all ${selectedImage === img ? 'border-sky-500 ring-2 ring-sky-300/40' : 'border-slate-200'
+                      }`}
                   >
                     <img src={img} alt={`${product.name} ${idx + 1}`} className="w-full h-full object-cover" />
                   </button>
@@ -95,7 +97,7 @@ export const ProductDetailsPage: React.FC = () => {
 
           {/* RIGHT: DETAILS & ACTIONS */}
           <div className="lg:col-span-6 space-y-6">
-            
+
             <div className="space-y-2">
               <span className="px-3 py-1 rounded-full bg-sky-100/80 text-sky-700 text-xs font-bold uppercase tracking-wider">
                 {product.category}
@@ -203,31 +205,28 @@ export const ProductDetailsPage: React.FC = () => {
           <div className="flex items-center gap-4 border-b border-slate-200">
             <button
               onClick={() => setActiveTab('description')}
-              className={`pb-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
-                activeTab === 'description'
+              className={`pb-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${activeTab === 'description'
                   ? 'border-sky-500 text-sky-600'
                   : 'border-transparent text-slate-400 hover:text-slate-700'
-              }`}
+                }`}
             >
               Product Description
             </button>
             <button
               onClick={() => setActiveTab('details')}
-              className={`pb-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
-                activeTab === 'details'
+              className={`pb-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${activeTab === 'details'
                   ? 'border-sky-500 text-sky-600'
                   : 'border-transparent text-slate-400 hover:text-slate-700'
-              }`}
+                }`}
             >
               Product Specifications
             </button>
             <button
               onClick={() => setActiveTab('reviews')}
-              className={`pb-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${
-                activeTab === 'reviews'
+              className={`pb-3 text-xs font-bold uppercase tracking-wider transition-all border-b-2 cursor-pointer ${activeTab === 'reviews'
                   ? 'border-sky-500 text-sky-600'
                   : 'border-transparent text-slate-400 hover:text-slate-700'
-              }`}
+                }`}
             >
               Customer Reviews ({product.reviews.length})
             </button>
