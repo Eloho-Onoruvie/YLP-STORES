@@ -125,7 +125,7 @@ export const DashboardPage: React.FC = () => {
                 Featured Faith Essentials
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Handpicked tools to inspire devotion, quiet time, and biblical study.
+                Handpicked tools to inspire devotion, quiet time, and biblical study
               </p>
             </div>
             <Link
